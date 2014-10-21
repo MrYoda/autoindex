@@ -45,7 +45,11 @@ class Mirror(object):
         if found is None:
             found = set()
         for url in urls:
-            response = requests.get(url)
+            try:
+                response = requests.get(url)
+            except Exception:
+                logger.exception("Can't fetch %s", url)
+                continue
             if response.status_code != 200:
                 logger.info("Non-200 response from {url}: {code}".format(
                     url=url, code=response.status_code,
