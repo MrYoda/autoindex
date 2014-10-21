@@ -101,7 +101,12 @@ class Mirror(object):
 
         for download in to_download:
             logger.info("Fetching {0}".format(download))
-            response = requests.get(download)
+            try:
+                response = requests.get(download)
+            except Exception, e:
+                logger.error("Error fetching {0}, {1}".format(
+                                      download, unicode(e)))
+                continue
             if not response.status_code == 200:
                 logger.error("Error fetching {0}, status {1}".format(
                     download, response.status_code,
