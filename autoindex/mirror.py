@@ -21,7 +21,7 @@ def mirror(directory, index_url):
 
     try:
         with open(mirror_file, 'r') as f:
-            dists = f.read().split()
+            dists = f.readlines()
     except IOError:
         error("Please create {0} with the packages you want to mirror.".format(
             mirror_file,
@@ -30,6 +30,8 @@ def mirror(directory, index_url):
     mirror = Mirror(directory, index_url)
 
     for dist in dists:
+        if dist.startswith('#'):
+            continue
         mirror.fetch_dist(dist.strip())
 
 
