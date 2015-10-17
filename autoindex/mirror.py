@@ -21,7 +21,7 @@ def mirror(directory, index_url):
 
     try:
         with open(mirror_file, 'r') as f:
-            dists = f.read().split()
+            dists = f.readlines()
     except IOError:
         error("Please create {0} with the packages you want to mirror.".format(
             mirror_file,
@@ -30,6 +30,8 @@ def mirror(directory, index_url):
     mirror = Mirror(directory, index_url)
 
     for dist in dists:
+        if dist.startswith('#'):
+            continue
         mirror.fetch_dist(dist.strip())
 
 
@@ -45,7 +47,11 @@ class Mirror(object):
         if found is None:
             found = set()
         for url in urls:
-            response = requests.get(url)
+            try:
+                response = requests.get(url)
+            except Exception:
+                logger.exception("Can't fetch %s", url)
+                continue
             if response.status_code != 200:
                 logger.info("Non-200 response from {url}: {code}".format(
                     url=url, code=response.status_code,
@@ -101,7 +107,12 @@ class Mirror(object):
 
         for download in to_download:
             logger.info("Fetching {0}".format(download))
-            response = requests.get(download)
+            try:
+                response = requests.get(download)
+            except Exception, e:
+                logger.error("Error fetching {0}, {1}".format(
+                                      download, unicode(e)))
+                continue
             if not response.status_code == 200:
                 logger.error("Error fetching {0}, status {1}".format(
                     download, response.status_code,
