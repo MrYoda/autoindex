@@ -3,7 +3,7 @@ import sys
 
 
 def error(err):
-    print err
+    print(err)
     sys.exit(1)
 
 

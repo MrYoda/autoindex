@@ -109,7 +109,7 @@ class Mirror(object):
             logger.info("Fetching {0}".format(download))
             try:
                 response = requests.get(download)
-            except Exception, e:
+            except Exception as e:
                 logger.error("Error fetching {0}, {1}".format(
                                       download, unicode(e)))
                 continue

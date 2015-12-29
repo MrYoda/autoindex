@@ -15,8 +15,8 @@ SILENCE_LOGGERS = [
 
 
 def show_help():
-    print """Usage: %s -d directory [-i indexserver] action
-Available actions: watch, index, mirror.""" % sys.argv[0]
+    print("""Usage: %s -d directory [-i indexserver] action
+Available actions: watch, index, mirror.""" % sys.argv[0])
     sys.exit(1)
 
 
